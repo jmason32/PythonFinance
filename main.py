@@ -25,6 +25,13 @@ import random as random
 import xlsxwriter
 from xlwt import Workbook
 
+import pandas as pd
+from xlrd import open_workbook
+
+import xlwt
+from xlwt import Workbook
+  
+
 def main():
     # Find a finance API and connect
     # Using yahoo for test starter
@@ -95,7 +102,32 @@ def main():
           https://xlsxwriter.readthedocs.io/tutorial01.html
     """
 
-  
+      # Workbook is created
+    wb = Workbook()
+      
+    # add_sheet is used to create sheet.
+    sheet1 = wb.add_sheet('RoadTo10')
+
+    addRow(x,y,'')
+      
+    sheet1.write(0, 0, 'Symbol')
+    sheet1.write(0, 1, 'Company Name')
+    sheet1.write(0, 2, '% Dividend Yeild')
+    sheet1.write(0, 3, 'Current Price')
+    sheet1.write(0, 4, 'Payout Per Stock')
+    sheet1.write(0, 5, 'Road to 10')
+    sheet1.write(0, 6, 'Shares')
+    sheet1.write(0, 7, 'Amount')
+    sheet1.write(0, 8, 'Dividend Return')
+
+    # 'Total Row'
+    # Has to move dynamically as you add stocks 
+
+    sheet1.write(26, 0, 'Total')
+
+      
+    wb.save('DividendWorkBook.xls')
+      
   
 # Workbook is created
     # wb = Workbook()
@@ -105,11 +137,6 @@ def main():
     # try:
     #   workbook = xlrd.open_workbook("Road_To_10.xlsx")
     # except FileNotFoundError:
-    workbook = xlsxwriter.Workbook('Road_To_10.xlsx')
-
-    #Create main worksheet
-    worksheet = workbook.add_worksheet()
-
   
     # create a PyStock object 
     myStock = PyStock("O")
@@ -167,6 +194,26 @@ class PyStock:
   def getPrice(self):
     return self.price
   
+
+"""
+Create a Workbook class
+"""
+class DivBook:
+
+  def __init__(self, filename, sheetTitle) -> None:
+    self.divBook = Workbook()
+
+
+  def saveBook(self):
+    self.divBook.save()
+
+
+
+
+
+
+def addRow(x, y, text, sheet):
+  sheet.write(x, y, )
 
 
 if "__main__" == __name__:
