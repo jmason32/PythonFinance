@@ -19,6 +19,8 @@ Python Finance
 """
 
 # Imports
+from multiprocessing.pool import INIT
+from typing import List
 import yfinance as yf  # yahoo finance package, used to get stock info
 import matplotlib.pyplot as plt  #ploting
 import random as random
@@ -30,7 +32,7 @@ from xlrd import open_workbook
 
 import xlwt
 from xlwt import Workbook
-  
+
 
 def main():
     # Find a finance API and connect
@@ -78,7 +80,6 @@ def main():
     stockInfo = stockSybmol.info
 
     # print(stockInfo)
-
     """
       Per access ask user if they want to add stock to excel file 
         Creates page with the stock symbol 
@@ -88,7 +89,6 @@ def main():
         Calulate how much needs to be bought in order to reach a certain dividend return 
       Analsisys 
     """
-
     """
     Look for excel file 
       create one if not there 
@@ -102,34 +102,32 @@ def main():
           https://xlsxwriter.readthedocs.io/tutorial01.html
     """
 
-      # Workbook is created
-    wb = Workbook()
-      
-    # add_sheet is used to create sheet.
-    sheet1 = wb.add_sheet('RoadTo10')
+    #   # Workbook is created
+    # wb = Workbook()
 
-    addRow(x,y,'')
-      
-    sheet1.write(0, 0, 'Symbol')
-    sheet1.write(0, 1, 'Company Name')
-    sheet1.write(0, 2, '% Dividend Yeild')
-    sheet1.write(0, 3, 'Current Price')
-    sheet1.write(0, 4, 'Payout Per Stock')
-    sheet1.write(0, 5, 'Road to 10')
-    sheet1.write(0, 6, 'Shares')
-    sheet1.write(0, 7, 'Amount')
-    sheet1.write(0, 8, 'Dividend Return')
+    # # add_sheet is used to create sheet.
+    # sheet1 = wb.add_sheet('RoadTo10')
 
-    # 'Total Row'
-    # Has to move dynamically as you add stocks 
+    # addRow(x,y,'')
 
-    sheet1.write(26, 0, 'Total')
+    # sheet1.write(0, 0, 'Symbol')
+    # sheet1.write(0, 1, 'Company Name')
+    # sheet1.write(0, 2, '% Dividend Yeild')
+    # sheet1.write(0, 3, 'Current Price')
+    # sheet1.write(0, 4, 'Payout Per Stock')
+    # sheet1.write(0, 5, 'Road to 10')
+    # sheet1.write(0, 6, 'Shares')
+    # sheet1.write(0, 7, 'Amount')
+    # sheet1.write(0, 8, 'Dividend Return')
 
-      
-    wb.save('DividendWorkBook.xls')
-      
-  
-# Workbook is created
+    # # 'Total Row'
+    # # Has to move dynamically as you add stocks
+
+    # sheet1.write(26, 0, 'Total')
+
+    # wb.save('DividendWorkBook.xls')
+
+    # Workbook is created
     # wb = Workbook()
 
     # sheet1 = wb.add_sheet('Sheet 1')
@@ -137,14 +135,30 @@ def main():
     # try:
     #   workbook = xlrd.open_workbook("Road_To_10.xlsx")
     # except FileNotFoundError:
-  
-    # create a PyStock object 
+
+    # Create workbook
+    bookName = "DividendWorkBook"
+    sheetName = "RoadTo10"
+
+    #Create Workbook
+    mybook = DivBook(bookName)
+
+    # Make a sheet
+    mybook.addSheet(sheetName)
+
+    #add header
+    mybook.addMainHeader(sheetName)
+
+    #save book
+    mybook.saveBook()
+
+    # create a PyStock object
     myStock = PyStock("O")
     print(myStock.current_price)
 
 
 class PyStock:
-  """
+    """
   TODO:
     Take in a ticker, 
       parse info for our needs 
@@ -156,64 +170,114 @@ class PyStock:
     Use this rest api to get frequency (monthly, quaterly, yearly)
         
   """
-  """
+    """
   init 
   @param stockSymbol: stock to convert into class 
   """
-  def __init__(self, stockSymbol):
+    def __init__(self, stockSymbol):
 
-    # Given a stock symbol, return an object with all stock attr.
-    stockTicker = yf.Ticker(stockSymbol)
+        # Given a stock symbol, return an object with all stock attr.
+        stockTicker = yf.Ticker(stockSymbol)
 
-    #info contains lots of useful things 
-    stockInfo = stockTicker.info
+        #info contains lots of useful things
+        stockInfo = stockTicker.info
 
-    #Assign values to class instance
-    self.name = stockInfo['longName']
-    self.current_price = stockInfo['currentPrice']
-    self.symbol = stockInfo['symbol']
-    self.dividendYield = stockInfo['dividendYield']
-    
-    # self.symbol = stockInfo
-    # self.name = tCompanyName
-    # self.current_price = tPrice
-    # self.dividend = tDiv
-    
-  """
+        #Assign values to class instance
+        self.name = stockInfo['longName']
+        self.current_price = stockInfo['currentPrice']
+        self.symbol = stockInfo['symbol']
+        self.dividendYield = stockInfo['dividendYield']
+
+        # self.symbol = stockInfo
+        # self.name = tCompanyName
+        # self.current_price = tPrice
+        # self.dividend = tDiv
+
+    """
   setPrice
     This function will be used to set stock price
     @param price: updated price of stock to set 
   """
-  def setPrice(self, price):
-    self.current_price = price
 
-  """
+    def setPrice(self, price):
+        self.current_price = price
+
+    """
   getPrice
     Function returns stock price
   """
-  def getPrice(self):
-    return self.price
-  
+
+    def getPrice(self):
+        return self.price
+
+
+class Row:
+    def __init__(self, x, y, data):
+        self.x = x
+        self.y = y
+        self.data = data
+
 
 """
 Create a Workbook class
 """
+
+
 class DivBook:
 
-  def __init__(self, filename, sheetTitle) -> None:
-    self.divBook = Workbook()
+    bookName = ""
 
+    def __init__(self, name):
+        self.divBook = Workbook()
+        self.bookName = name
 
-  def saveBook(self):
-    self.divBook.save()
+    """
+  setActiveSheet
+  """
 
+    def setActiveSheet(self, sheet):
+        return self.divBook.set_active_sheet(sheet)
 
+    """
+  addData
+  """
 
+    def addData(self, sheet, rows):
+        for row in rows:
+            sheet.write(row.x, row.y, row.data)
 
+    """
+  addSheet 
+    @param sheetTitle: title of sheet to be added
+  """
 
+    def addSheet(self, sheetTitle):
+        sheet = self.divBook.add_sheet(sheetTitle)
 
-def addRow(x, y, text, sheet):
-  sheet.write(x, y, )
+    """
+  saveBook
+    @param fileName: fileName to save book as 
+  """
+
+    def saveBook(self):
+        return self.divBook.save(self.bookName + ".xls")
+
+    """
+  addMainHeader
+  """
+
+    def addMainHeader(self, sheetName):
+        sheet = self.divBook.get_sheet(sheetName)
+
+        headerTitle = [
+            "Symbol", "Company Name", "% Dividend Yeild", "Current Price",
+            "Payout Per Stock", "", "Road to 10", "Shares #", "Amount $",
+            "Dividend Return $"
+        ]
+
+        for i, title in enumerate(headerTitle):
+            print("Prining out {}".format(title))
+            # self.addData(sheet, (x : 0, y: i, data : title))
 
 
 if "__main__" == __name__:
