@@ -142,6 +142,24 @@ def main():
     myStock = PyStock("O")
     print(myStock.current_price)
 
+"""
+TODO: 
+  Push code home from home to main branch
+  Clean up 
+  Branch out!!!
+
+
+  Create page for specific stock
+    SheetName = Stock Symbol - Company Name (O - Reality Income)
+
+  Track dividend buys/earnings 
+    Transaction
+      Date 
+      Price Bought At 
+      Current Price 
+  
+"""
+
 
 class PyStock:
   """
