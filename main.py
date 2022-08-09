@@ -142,23 +142,51 @@ def main():
     myStock = PyStock("O")
     print(myStock.current_price)
 
-"""
-TODO: 
-  Push code home from home to main branch
-  Clean up 
-  Branch out!!!
-
-
-  Create page for specific stock
-    SheetName = Stock Symbol - Company Name (O - Reality Income)
-
-  Track dividend buys/earnings 
-    Transaction
-      Date 
-      Price Bought At 
-      Current Price 
+    """
+      Save off stock info into dict
+        add if new 
+    """
   
-"""
+
+    """
+    TODO: 
+      Push code home from home to main branch
+      Clean up 
+      Branch out!!!
+    
+    
+      Create page for specific stock
+        SheetName = Stock Symbol - Company Name (O - Reality Income)
+    
+      Track dividend buys/earnings 
+        Transaction
+          Date 
+          Price Bought At 
+          Current Price 
+          * Gain 
+          Div Yield
+          Div Amount $
+    
+          Total Row
+      
+    """
+
+  """
+    Function to add a stock sheet to workbook
+    @param stockSymbol: Stock to create sheet for
+  """
+  def addStockSheet(book, stockSymbol):
+    # Create a sheet with the stock symbol being the name
+    fileName = stockSybmol
+    book.addSheet(fileName)
+
+    #Header for sheet
+    stockHeader = ["Transaction Date", "Price Bought At",
+                  "# Shares", "Dividend Yield %", "Dividend Amount"]
+
+    for title in stockHeader:
+      pass
+
 
 
 class PyStock:
