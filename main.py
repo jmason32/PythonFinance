@@ -70,6 +70,7 @@ def main():
 
     # Add stock to profolio
     mybook.addStock("O")
+    mybook.addStockSheet("O")
 
     #save book
     mybook.saveBook()

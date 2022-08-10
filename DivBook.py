@@ -57,7 +57,7 @@ class DivBook:
         headerTitle = [
             "Symbol", "Company Name", "% Dividend Yeild", "Current Price",
             "Payout Per Stock", "", "Road to 10", "Shares #", "Amount $",
-            "Dividend Return $"
+            "Dividend Return $", "Rule 72"
         ]
 
         for i, title in enumerate(headerTitle):
@@ -107,6 +107,8 @@ class DivBook:
     
       for i, title in enumerate(stockHeader):
         self.addData(sheet, [(0, i, title)])
+      
+      self.addData(sheet, [(1, 0, "Total: ")])
 
     def addStock(self, stockSymbol):
       #Get summary sheet
@@ -116,3 +118,8 @@ class DivBook:
 
       stock = PyStock.PyStock(stockSymbol)
       print(stock.getMainInfo())
+
+    """
+    """
+    def stockTotalRow(self):
+      pass
