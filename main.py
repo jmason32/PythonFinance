@@ -22,6 +22,7 @@ Python Finance
 import PyStock
 import DivBook
 
+
 def main():
     # Find a finance API and connect
     # Using yahoo for test starter
@@ -32,25 +33,6 @@ def main():
     
     """
     # https://pypi.org/project/yfinance/
-    """
-    Quick Start
-      The Ticker module
-        Use the ticker module to get info of stock 
-  
-        msft = yf.Ticker("MSFT")
-        # get stock info
-        msft.info
-        
-        # get historical market data
-        hist = msft.history(period="max")
-        
-        # show actions (dividends, splits)
-        msft.actions
-        
-        # show dividends
-        msft.dividends
-        msft.news
-    """
     """
       Per access ask user if they want to add stock to excel file 
         Creates page with the stock symbol 
@@ -72,40 +54,6 @@ def main():
   
           https://xlsxwriter.readthedocs.io/tutorial01.html
     """
-
-    #   # Workbook is created
-    # wb = Workbook()
-
-    # # add_sheet is used to create sheet.
-    # sheet1 = wb.add_sheet('RoadTo10')
-
-    # addRow(x,y,'')
-
-    # sheet1.write(0, 0, 'Symbol')
-    # sheet1.write(0, 1, 'Company Name')
-    # sheet1.write(0, 2, '% Dividend Yeild')
-    # sheet1.write(0, 3, 'Current Price')
-    # sheet1.write(0, 4, 'Payout Per Stock')
-    # sheet1.write(0, 5, 'Road to 10')
-    # sheet1.write(0, 6, 'Shares')
-    # sheet1.write(0, 7, 'Amount')
-    # sheet1.write(0, 8, 'Dividend Return')
-
-    # # 'Total Row'
-    # # Has to move dynamically as you add stocks
-
-    # sheet1.write(26, 0, 'Total')
-
-    # wb.save('DividendWorkBook.xls')
-
-    # Workbook is created
-    # wb = Workbook()
-
-    # sheet1 = wb.add_sheet('Sheet 1')
-
-    # try:
-    #   workbook = xlrd.open_workbook("Road_To_10.xlsx")
-    # except FileNotFoundError:
 
     # Create workbook
     bookName = "DividendWorkBook"
