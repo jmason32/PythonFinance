@@ -2,7 +2,7 @@
 Create a Workbook class
 """
 from xlwt import Workbook
-
+from typing import List
 
 class DivBook:
 
@@ -24,8 +24,11 @@ class DivBook:
     """
 
     def addData(self, sheet, rows):
+        if type(rows) != List:
+            rows = [rows]
+
         for row in rows:
-            sheet.write(row.x, row.y, row.data)
+            sheet.write(row[0], row[1], row[2])
 
     """
     addSheet 
@@ -33,8 +36,7 @@ class DivBook:
     """
 
     def addSheet(self, sheetTitle):
-      sheet = self.divBook.add_sheet(sheetTitle)
-      
+        sheet = self.divBook.add_sheet(sheetTitle)
 
     """
     saveBook
@@ -59,4 +61,4 @@ class DivBook:
 
         for i, title in enumerate(headerTitle):
             print("Prining out {}".format(title))
-            # self.addData(sheet, (x : 0, y: i, data : title))
+            self.addData(sheet, (0, i, title))
