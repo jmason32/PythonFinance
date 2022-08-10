@@ -3,6 +3,7 @@ Create a Workbook class
 """
 from xlwt import Workbook
 from typing import List
+import PyStock
 
 class DivBook:
 
@@ -24,8 +25,8 @@ class DivBook:
     """
 
     def addData(self, sheet, rows):
-        if type(rows) != List:
-            rows = [rows]
+        # if type(rows) != List:
+        #     rows = [rows]
 
         for row in rows:
             sheet.write(row[0], row[1], row[2])
@@ -61,7 +62,7 @@ class DivBook:
 
         for i, title in enumerate(headerTitle):
             print("Prining out {}".format(title))
-            self.addData(sheet, (0, i, title))
+            self.addData(sheet, [(0, i, title)])
 
     
     """
@@ -94,14 +95,24 @@ class DivBook:
     def addStockSheet(self, stockSymbol):
       # Create a sheet with the stock symbol being the name
       sheetName = stockSymbol
-      self.divBook.addSheet(sheetName)
+      # self.addSheet(sheetName)
+      self.addSheet(sheetName)
       sheet = self.divBook.get_sheet(sheetName)
     
       #Header for sheet
       # stockHeader = ["Transaction Date", "Price Bought At",
       #               "# Shares", "Dividend Yield %", "Dividend Amount"]
     
-      stockHeader = ["Transaction Date",	"Amount Sent",	"Dividend	Share Cost",	"Shares",	"Shares via Div",	"Shares Outright"]
+      stockHeader = ["Transaction Date",	"Amount Sent",	"Dividend Share Cost",	"Shares",	"Shares via Div",	"Shares Outright"]
     
       for i, title in enumerate(stockHeader):
-        self.addData(sheet, (0, i, title))
+        self.addData(sheet, [(0, i, title)])
+
+    def addStock(self, stockSymbol):
+      #Get summary sheet
+      sheet = self.divBook.get_sheet("RoadTo10")
+
+      #Get info on stock 
+
+      stock = PyStock.PyStock(stockSymbol)
+      print(stock.getMainInfo())

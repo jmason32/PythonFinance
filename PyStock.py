@@ -26,20 +26,21 @@ class PyStock:
         # self.name = tCompanyName
         # self.current_price = tPrice
         # self.dividend = tDiv
+      
+    # def __repr__(self):
+    #     return f'Person(name={self.name}, age={self.age})'
 
-    """
-  setPrice
-    This function will be used to set stock price
-    @param price: updated price of stock to set 
-  """
+    def getMainInfo(self):
+      print(f'PyStock("symbol":{self.symbol}, "name":{self.name}, "current_price":{self.current_price}, "dy":{self.dividendYield})')
+    
 
     def setPrice(self, price):
         self.current_price = price
 
     """
-  getPrice
-    Function returns stock price
-  """
+    getPrice
+      Function returns stock price
+    """
 
     def getPrice(self):
         return self.price

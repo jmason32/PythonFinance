@@ -68,13 +68,15 @@ def main():
     #add header
     mybook.addMainHeader(sheetName)
 
+    # Add stock to profolio
+    mybook.addStock("O")
+
     #save book
     mybook.saveBook()
 
     # create a PyStock object
     myStock = PyStock.PyStock("O")
     print(myStock.current_price)
-
 
 
 class Row:
