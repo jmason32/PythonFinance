@@ -62,3 +62,46 @@ class DivBook:
         for i, title in enumerate(headerTitle):
             print("Prining out {}".format(title))
             self.addData(sheet, (0, i, title))
+
+    
+    """
+    TODO: 
+      Push code home from home to main branch
+      Clean up 
+      Branch out!!!
+    
+    
+      Create page for specific stock
+        SheetName = Stock Symbol - Company Name (O - Reality Income)
+    
+      Track dividend buys/earnings 
+        Transaction
+          Date 
+          Price Bought At 
+          Current Price 
+          * Gain 
+          Div Yield
+          Div Amount $
+    
+          Total Row
+      
+    """
+
+    """
+      Function to add a stock sheet to workbook
+      @param stockSymbol: Stock to create sheet for
+    """
+    def addStockSheet(self, stockSymbol):
+      # Create a sheet with the stock symbol being the name
+      sheetName = stockSymbol
+      self.divBook.addSheet(sheetName)
+      sheet = self.divBook.get_sheet(sheetName)
+    
+      #Header for sheet
+      # stockHeader = ["Transaction Date", "Price Bought At",
+      #               "# Shares", "Dividend Yield %", "Dividend Amount"]
+    
+      stockHeader = ["Transaction Date",	"Amount Sent",	"Dividend	Share Cost",	"Shares",	"Shares via Div",	"Shares Outright"]
+    
+      for i, title in enumerate(stockHeader):
+        self.addData(sheet, (0, i, title))
