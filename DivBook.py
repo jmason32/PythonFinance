@@ -1,16 +1,17 @@
 """
 Create a Workbook class
 """
-from xlwt import Workbook
+import xlsxwriter as Workbook
 from typing import List
 import PyStock
+
 
 class DivBook:
 
     bookName = ""
 
     def __init__(self, name):
-        self.divBook = Workbook()
+        self.divBook = Workbook.Workbook(name + ".xlsx", {'in_memory': True})
         self.bookName = name
 
     """
@@ -37,7 +38,7 @@ class DivBook:
     """
 
     def addSheet(self, sheetTitle):
-        sheet = self.divBook.add_sheet(sheetTitle)
+        sheet = self.divBook.add_worksheet(sheetTitle)
 
     """
     saveBook
@@ -45,17 +46,17 @@ class DivBook:
     """
 
     def saveBook(self):
-        return self.divBook.save(self.bookName + ".xls")
+        return self.divBook.close()
 
     """
     addMainHeader
     """
 
     def addMainHeader(self, sheetName):
-        sheet = self.divBook.get_sheet(sheetName)
+        sheet = self.divBook.get_worksheet_by_name(sheetName)
 
         headerTitle = [
-            "Symbol", "Company Name", "% Dividend Yeild", "Current Price",
+            "Symbol", "Company Name", "% Dividend Yield", "Current Price",
             "Payout Per Stock", "", "Road to 10", "Shares #", "Amount $",
             "Dividend Return $", "Rule 72"
         ]
@@ -64,7 +65,6 @@ class DivBook:
             print("Prining out {}".format(title))
             self.addData(sheet, [(0, i, title)])
 
-    
     """
     TODO: 
       Push code home from home to main branch
@@ -87,39 +87,43 @@ class DivBook:
           Total Row
       
     """
-
     """
       Function to add a stock sheet to workbook
       @param stockSymbol: Stock to create sheet for
     """
+
     def addStockSheet(self, stockSymbol):
-      # Create a sheet with the stock symbol being the name
-      sheetName = stockSymbol
-      # self.addSheet(sheetName)
-      self.addSheet(sheetName)
-      sheet = self.divBook.get_sheet(sheetName)
-    
-      #Header for sheet
-      # stockHeader = ["Transaction Date", "Price Bought At",
-      #               "# Shares", "Dividend Yield %", "Dividend Amount"]
-    
-      stockHeader = ["Transaction Date",	"Amount Sent",	"Dividend Share Cost",	"Shares",	"Shares via Div",	"Shares Outright"]
-    
-      for i, title in enumerate(stockHeader):
-        self.addData(sheet, [(0, i, title)])
-      
-      self.addData(sheet, [(1, 0, "Total: ")])
+        # Create a sheet with the stock symbol being the name
+        sheetName = stockSymbol
+        # self.addSheet(sheetName)
+        self.addSheet(sheetName)
+        sheet = self.divBook.get_worksheet_by_name(sheetName)
+
+        #Header for sheet
+        # stockHeader = ["Transaction Date", "Price Bought At",
+        #               "# Shares", "Dividend Yield %", "Dividend Amount"]
+
+        stockHeader = [
+            "Transaction Date", "Amount Sent", "Dividend Share Cost", "Shares",
+            "Shares via Div", "Shares Outright"
+        ]
+
+        for i, title in enumerate(stockHeader):
+            self.addData(sheet, [(0, i, title)])
+
+        self.addData(sheet, [(1, 0, "Total: ")])
 
     def addStock(self, stockSymbol):
-      #Get summary sheet
-      sheet = self.divBook.get_sheet("RoadTo10")
+        #Get summary sheet
+        sheet = self.divBook.get_worksheet_by_name("RoadTo10")
 
-      #Get info on stock 
+        #Get info on stock
 
-      stock = PyStock.PyStock(stockSymbol)
-      print(stock.getMainInfo())
+        stock = PyStock.PyStock(stockSymbol)
+        print(stock.getMainInfo())
 
     """
     """
+
     def stockTotalRow(self):
-      pass
+        pass
