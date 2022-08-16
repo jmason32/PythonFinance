@@ -4,22 +4,39 @@ Create a Workbook class
 import xlsxwriter as Workbook
 from typing import List
 import PyStock
+import pandas as pd
 
 
 class DivBook:
 
     bookName = ""
+    main_stock_content = {}
+    mainSheet = "RoadTo10"
 
     def __init__(self, name):
-        self.divBook = Workbook.Workbook(name + ".xlsx", {'in_memory': True})
-        self.bookName = name
+        self.ewriter = pd.ExcelWriter(name + ".xlsx", engine='xlsxwriter')
+        self.book = self.ewriter.book
+        print(self.book)
+
+        self.bookName = name + ".xlsx"
+
+    def getMainStockContent(self):
+        # Get the main sheet 
+        sheet = self.getSheet(self.mainSheet)
+
+        contents = pd.read_excel(self.book, engine="xlrd")
+        print(contents)
+
+
+    def getSheet(self, sheetName):
+        return self.book.get_worksheet_by_name(sheetName)
 
     """
     setActiveSheet
     """
 
     def setActiveSheet(self, sheet):
-        return self.divBook.set_active_sheet(sheet)
+        return self.book.set_active_sheet(sheet)
 
     """
     addData
@@ -38,7 +55,7 @@ class DivBook:
     """
 
     def addSheet(self, sheetTitle):
-        sheet = self.divBook.add_worksheet(sheetTitle)
+        sheet = self.book.add_worksheet(sheetTitle)
 
     """
     saveBook
@@ -46,14 +63,14 @@ class DivBook:
     """
 
     def saveBook(self):
-        return self.divBook.close()
+        return self.book.close()
 
     """
     addMainHeader
     """
 
     def addMainHeader(self, sheetName):
-        sheet = self.divBook.get_worksheet_by_name(sheetName)
+        sheet = self.book.get_worksheet_by_name(sheetName)
 
         headerTitle = [
             "Symbol", "Company Name", "% Dividend Yield", "Current Price",
@@ -97,7 +114,7 @@ class DivBook:
         sheetName = stockSymbol
         # self.addSheet(sheetName)
         self.addSheet(sheetName)
-        sheet = self.divBook.get_worksheet_by_name(sheetName)
+        sheet = self.book.get_worksheet_by_name(sheetName)
 
         #Header for sheet
         # stockHeader = ["Transaction Date", "Price Bought At",
@@ -114,13 +131,20 @@ class DivBook:
         self.addData(sheet, [(1, 0, "Total: ")])
 
     def addStock(self, stockSymbol):
+        """
+        To add stock to main sheet 
+            - read in all the contents of the main sheet into a dict
+            - append new content 
+        """
         #Get summary sheet
-        sheet = self.divBook.get_worksheet_by_name("RoadTo10")
+        sheet = self.book.get_worksheet_by_name("RoadTo10")
 
         #Get info on stock
 
         stock = PyStock.PyStock(stockSymbol)
         print(stock.getMainInfo())
+        # Sym, Company Name, divdend %
+        # Get next line 
 
     """
     """
