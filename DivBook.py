@@ -1,10 +1,16 @@
 """
 Create a Workbook class
 """
+from asyncore import read
+import imp
+from statistics import mode
+from tokenize import maybe
 import xlsxwriter as Workbook
 from typing import List
 import PyStock
 import pandas as pd
+import os
+from openpyxl import load_workbook
 
 
 class DivBook:
@@ -13,12 +19,47 @@ class DivBook:
     main_stock_content = {}
     mainSheet = "RoadTo10"
 
-    def __init__(self, name):
-        self.ewriter = pd.ExcelWriter(name + ".xlsx", engine='xlsxwriter')
-        self.book = self.ewriter.book
-        print(self.book)
-
+    def __init__(self, name, reader = False):
+        # if not reader:
+        #     self.ewriter = pd.ExcelWriter(name + ".xlsx", engine='xlsxwriter')
+        #     self.book = self.ewriter.book
+        #     print(self.book)
+        # else:
+        #     self.ereader = pd.read_excel(name + ".xlsx")
         self.bookName = name + ".xlsx"
+
+    def addStockToMain(self, ):
+        # Check if the WB is open, if open close it 
+        # Close WB
+        self.saveBook()
+
+        # Get last row within sheet
+        try:
+            last_row = self.get_last_row(self.mainSheet)
+        except KeyError:
+            print("need to make sheet")
+            self.addSheet(self.mainSheet)
+
+        # # Open back up sheet 
+        # print(last_row)
+
+        # #open back up book
+        # self.open_book(reader = False)
+        # # print(mybook.mainSheet)
+        # sheet = self.book.get_worksheet_by_name(self.mainSheet)
+        # print(sheet)
+        # self.addData(sheet, [(last_row, 0, "hello")])
+
+
+
+    def open_book(self, reader = False):
+        if not reader:
+            self.ewriter = pd.ExcelWriter(self.bookName, engine='xlsxwriter')
+            self.book = self.ewriter.book
+            print(self.book)
+        else:
+            self.ereader = pd.read_excel(self.bookName)
+
 
     def getMainStockContent(self):
         # Get the main sheet 
@@ -69,8 +110,12 @@ class DivBook:
     addMainHeader
     """
 
-    def addMainHeader(self, sheetName):
-        sheet = self.book.get_worksheet_by_name(sheetName)
+    def addMainHeaderSheet(self):
+        #open book
+        self.open_book(reader=False)
+
+        self.addSheet(self.mainSheet)
+        sheet = self.book.get_worksheet_by_name(self.mainSheet)
 
         headerTitle = [
             "Symbol", "Company Name", "% Dividend Yield", "Current Price",
@@ -82,6 +127,7 @@ class DivBook:
             print("Prining out {}".format(title))
             self.addData(sheet, [(0, i, title)])
 
+        self.saveBook()
     """
     TODO: 
       Push code home from home to main branch
@@ -110,6 +156,8 @@ class DivBook:
     """
 
     def addStockSheet(self, stockSymbol):
+        #open book
+        self.open_book(reader=False)
         # Create a sheet with the stock symbol being the name
         sheetName = stockSymbol
         # self.addSheet(sheetName)
@@ -130,6 +178,9 @@ class DivBook:
 
         self.addData(sheet, [(1, 0, "Total: ")])
 
+        stock = PyStock.PyStock(stockSymbol)
+        stock.getMainInfo()
+
     def addStock(self, stockSymbol):
         """
         To add stock to main sheet 
@@ -137,17 +188,42 @@ class DivBook:
             - append new content 
         """
         #Get summary sheet
-        sheet = self.book.get_worksheet_by_name("RoadTo10")
+        # sheet = self.book.get_worksheet_by_name("RoadTo10")
 
         #Get info on stock
 
         stock = PyStock.PyStock(stockSymbol)
-        print(stock.getMainInfo())
+        stock.getMainInfo()
         # Sym, Company Name, divdend %
-        # Get next line 
+        # Get next line
+        
+
+
+        # self.read_sheet()
 
     """
     """
 
     def stockTotalRow(self):
         pass
+
+    def read_sheet(self, sheetName):
+        dataframe1 = pd.read_excel('DividendWorkBook.xlsx', engine="openpyxl")
+
+
+        print(dataframe1)
+        # print(dataframe1.sheetnames)
+
+    
+    def get_last_row(self, sheetName):
+        # make sure sheet exists 
+
+        #open 
+        df = load_workbook(self.bookName) # dataframe
+        sheet = df.get_sheet_by_name(sheetName)
+
+        last_row = 0 
+        for i in sheet.iter_rows():
+            last_row+=1
+
+        return last_row

@@ -20,7 +20,8 @@ Python Finance
 
 # Imports
 import PyStock
-import DivBook
+import DivBook as DB
+import pandas as pd
 
 
 def main():
@@ -57,29 +58,46 @@ def main():
 
     # Create workbook
     bookName = "DividendWorkBook"
-    sheetName = "RoadTo10"
 
-    #Create Workbook
-    mybook = DivBook.DivBook(bookName)
+    # #Create Workbook
+    mybook = DB.DivBook(bookName)
+    # addRoadnHeader(mybook)
+    # # # Add stock to profolio
+    mybook.addMainHeaderSheet()
 
-    # Make a sheet
-    mybook.addSheet(sheetName)
-
-    #add header
-    mybook.addMainHeader(sheetName)
-
-    # Add stock to profolio
-    mybook.addStock("O")
     mybook.addStockSheet("O")
-    mybook.getMainStockContent()
+    
+    # mybook.addStockToMain()
 
     #save book
-    mybook.saveBook()
+    # mybook.saveBook()
 
-    # create a PyStock object
-    myStock = PyStock.PyStock("O")
-    print(myStock.current_price)
+    # mybook.read_sheet("RoadTo10")
 
+    # mybook.getMainStockContent()
+
+    # # create a PyStock object
+    # myStock = PyStock.PyStock("O")
+    # print(myStock.current_price)
+
+def addRoadnHeader(mybook: DB):
+  sheetName = "RoadTo10"
+  #opn book 
+  mybook.open_book(reader = False)
+
+  #try and get sheet
+  try:
+    mybook.book.get_worksheet_by_name(sheetName)
+    print("Sheet exists")
+  except KeyError:
+    # # Make a sheet
+    mybook.addSheet(sheetName)
+
+    # # #add header
+    mybook.addMainHeader(sheetName)
+
+  mybook.saveBook()
+   
 
 class Row:
     def __init__(self, x, y, data):
